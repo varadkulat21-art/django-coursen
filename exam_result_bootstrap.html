@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exam Result - {{ course.name }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-success">
+    <div class="container">
+      <a class="navbar-brand" href="#">OnlineCourse</a>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    {% if grade >= 80 %}
+    <div class="alert alert-success">
+      <h2>Congratulations, {{ submission.learner.user.username }}!</h2>
+      <p>You have passed the exam for <strong>{{ course.name }}</strong>.</p>
+    </div>
+    {% else %}
+    <div class="alert alert-danger">
+      <h2>Sorry, {{ submission.learner.user.username }}.</h2>
+      <p>You did not pass this time. Please try again.</p>
+    </div>
+    {% endif %}
+
+    <h3>Score: {{ total_score }} / {{ max_score }} ({{ grade }}%)</h3>
+
+    <h4 class="mt-4">Exam results</h4>
+    {% for item in results %}
+    <div class="card my-3">
+      <div class="card-header">
+        {{ item.question.content }}
+        {% if item.correct %}
+        <span class="badge bg-success">Correct</span>
+        {% else %}
+        <span class="badge bg-danger">Incorrect</span>
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <ul>
+          {% for choice in item.choices %}
+          <li>
+            {{ choice.content }}
+            {% if choice.id in item.selected_ids %}(your answer){% endif %}
+            {% if choice.is_correct %}<strong>- correct answer</strong>{% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+</html>
